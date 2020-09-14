@@ -16,6 +16,7 @@ class Email(models.Model):
     read = models.BooleanField(default=False)
     archived = models.BooleanField(default=False)
 
+    # Return JSON representation of the email
     def serialize(self):
         return {
             "id": self.id,
