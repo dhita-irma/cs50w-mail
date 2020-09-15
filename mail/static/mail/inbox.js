@@ -23,18 +23,27 @@ function compose_email() {
 
   document.querySelector('#compose-button').onclick = function(){
 
+    const recipients = document.querySelector('#compose-recipients').value;
+    const subject = document.querySelector('#compose-subject').value;
+    const body = document.querySelector('#compose-body').value;
+
+    // Send email
     fetch('/emails', {
       method: 'POST',
       body: JSON.stringify({
-        recipients: 'hermione@example.com',
-        subject: 'Hello',
-        body: 'Hi how are  you?'
+        recipients: recipients,
+        subject: subject,
+        body: body
       })
     })
     .then(response => response.json())
     .then(result => {
       console.log(result);
     });
+
+    //Load sent box
+    load_mailbox('sent');
+    
   }
 }
 
