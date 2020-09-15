@@ -43,7 +43,7 @@ function compose_email() {
 
     //Load sent box
     load_mailbox('sent');
-    
+
   }
 }
 
@@ -55,4 +55,25 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
-}
+
+  fetch(`/emails/${mailbox}`)
+    .then(response => response.json())
+    .then(emails => {
+      // Print emails
+      console.log(emails);
+
+      // Display emails 
+      var emailsContent = document.querySelector('#emails-view');
+
+      for (var i = 0; i < emails.length; i++) {
+        
+        // append email into our page
+        var div = document.createElement("div");
+        div.innerHTML = 'Recipients:' + emails[i].recipients;
+        emailsContent.appendChild(div);
+
+      }
+      
+    });
+
+} // func load_mailbox
