@@ -67,13 +67,30 @@ function load_mailbox(mailbox) {
 
       for (var i = 0; i < emails.length; i++) {
         
-        // append email into our page
-        var div = document.createElement("div");
-        div.innerHTML = 'Recipients:' + emails[i].recipients;
-        emailsContent.appendChild(div);
+        // Create div element for each email row
+        var row = document.createElement('div');
+        row.className = 'row';
 
-      }
+        // Create columns for each row 
+        const colRescipients = `<div class="col-3"><b>${emails[i].recipients}</b></div>`;
+        const colSender = `<div class="col-3"><b>${emails[i].sender}</b></div>`;
+        const colSubject = `<div class="col-6">${emails[i].subject}</div>`;
+        const colTime = `<div class="col-3 text-muted">${emails[i].timestamp}</div>`;
+
+        // Append columns into row 
+        if (mailbox === 'inbox') {
+          row.insertAdjacentHTML('beforeEnd', colSender);
+        } else {
+          row.insertAdjacentHTML('beforeEnd', colRescipients);
+        }
+        row.insertAdjacentHTML('beforeEnd', colSubject);
+        row.insertAdjacentHTML('beforeEnd', colTime);
+
+        // Append row into #email-view element
+        emailsContent.appendChild(row);
+
+      } // For loop
       
-    });
+    }); // .then
 
 } // func load_mailbox
