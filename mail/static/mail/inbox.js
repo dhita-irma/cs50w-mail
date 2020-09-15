@@ -20,6 +20,22 @@ function compose_email() {
   document.querySelector('#compose-recipients').value = '';
   document.querySelector('#compose-subject').value = '';
   document.querySelector('#compose-body').value = '';
+
+  document.querySelector('#compose-button').onclick = function(){
+
+    fetch('/emails', {
+      method: 'POST',
+      body: JSON.stringify({
+        recipients: 'hermione@example.com',
+        subject: 'Hello',
+        body: 'Hi how are  you?'
+      })
+    })
+    .then(response => response.json())
+    .then(result => {
+      console.log(result);
+    });
+  }
 }
 
 function load_mailbox(mailbox) {
