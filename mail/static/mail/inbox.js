@@ -71,6 +71,13 @@ function load_mailbox(mailbox) {
         var row = document.createElement('div');
         row.className = 'row';
 
+        // Set row background
+        if (emails[i].read === false) {
+          row.style.background = 'white';
+        } else {
+          row.style.background = '#ebebeb';
+        }
+
         // Create columns for each row 
         const colRescipients = `<div class="col-3"><b>${emails[i].recipients}</b></div>`;
         const colSender = `<div class="col-3"><b>${emails[i].sender}</b></div>`;
