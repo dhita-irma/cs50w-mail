@@ -4,23 +4,43 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
-  document.querySelector('#compose').addEventListener('click', compose_email);
+  document.querySelector('#compose').addEventListener('click', () => compose_email());
 
   // By default, load the inbox
   load_mailbox('inbox');
 });
 
-function compose_email() {
+function compose_email(email='new') {
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
   document.querySelector('#open-email').style.display = 'none';
+  
+  if(email === 'new') {
+    console.log('Compose new email')
+    
+    // Clear out composition fields
+    document.querySelector('#compose-recipients').value = '';
+    document.querySelector('#compose-subject').value = '';
+    document.querySelector('#compose-body').value = '';
+    
+  } else {
+    console.log('Reply to an email')
+  
+    // Pre-fill form
+    document.querySelector('#compose-recipients').value = email.sender;
+    document.querySelector('#compose-body').value = `On ${email.timestamp} ${email.sender} wrote:\n${email.body}`;
+    
+    var subject = email.subject;
+    if(subject.slice(0, 3).toLowerCase() === 're:') {
+      document.querySelector('#compose-subject').value = `${email.subject}`;
+    } else {
+      document.querySelector('#compose-subject').value = `Re: ${email.subject}`;
+    }
+    
+  }
 
-  // Clear out composition fields
-  document.querySelector('#compose-recipients').value = '';
-  document.querySelector('#compose-subject').value = '';
-  document.querySelector('#compose-body').value = '';
 
   document.querySelector('#compose-button').onclick = function(){
 
@@ -114,6 +134,9 @@ function open_email(id, mailbox) {
 
     archiveBtn.addEventListener('click', () => archive(email.archived));
 
+    // Reply email
+    var replyBtn = document.querySelector('#reply-button')
+    replyBtn.addEventListener('click', () => compose_email(email));
 
   }); // .then
 
