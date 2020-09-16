@@ -1,3 +1,18 @@
+body {
+    padding: 20px 0 100px 0;
+}
+
 textarea {
     min-height: 400px;
+}
+
+.row {
+    margin: 5px 0 5px 0;
+    padding: 10px 0 10px 0;
+    border: 1px solid lightgray;
+    border-radius: 8px;
+}
+
+#button-row {
+    padding-top: 5px;
 }

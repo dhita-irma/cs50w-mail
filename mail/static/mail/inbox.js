@@ -103,11 +103,11 @@ function open_email(id, mailbox) {
     // Add buttons for inbox emails
     var buttonRow = document.querySelector('#button-row');
     if(mailbox === 'inbox') {
-      buttonRow.innerHTML = `<button id="reply-button" type="button" class="btn btn-outline-primary">Reply</button>
-                            <button id="archive-button" type="button" class="btn btn-outline-primary">Archive</button>
+      buttonRow.innerHTML = `<button id="reply-button" type="button" class="btn btn-outline-primary btn-sm">Reply</button>
+                            <button id="archive-button" type="button" class="btn btn-outline-primary btn-sm">Archive</button>
                             `
     }else if(mailbox === 'archive') {
-      buttonRow.innerHTML = `<button id="archive-button" type="button" class="btn btn-outline-primary">Unarchive</button>`
+      buttonRow.innerHTML = `<button id="archive-button" type="button" class="btn btn-outline-primary btn-sm">Unarchive</button>`
     }
 
     // Mark email as read
