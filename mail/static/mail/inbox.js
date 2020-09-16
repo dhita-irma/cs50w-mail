@@ -15,6 +15,7 @@ function compose_email() {
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
+  document.querySelector('#open-email').style.display = 'none';
 
   // Clear out composition fields
   document.querySelector('#compose-recipients').value = '';
@@ -47,11 +48,58 @@ function compose_email() {
   }
 }
 
+
+function open_email(id) {
+
+  console.log('This element has been clicked!')
+  // console.log(email)
+
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#open-email').style.display = 'block';
+
+  // Clear page 
+  document.querySelector('#open-email').innerHTML = "";
+
+  // Get email details
+  fetch(`/emails/${id}`)
+  .then(response => response.json())
+  .then(email => {
+    console.log(email);
+
+    // Display email
+    var content = document.querySelector('#open-email')
+    var element = document.createElement('div')
+    element.innerHTML = `<b>From: </b> ${email.sender}<br>
+                        <b>To: </b> ${email.recipients}<br>
+                        <b>Subject: </b> ${email.subject}<br>
+                        <b>Timestamp: </b> ${email.timestamp}<br>
+                        <button id="reply-button" type="button" class="btn btn-outline-primary">Reply</button>
+                        <button id="archive-button" type="button" class="btn btn-outline-primary">Archive</button>
+                        <hr>
+                        ${email.body}`
+
+    content.appendChild(element)
+
+    // Mark email as read
+    fetch(`/emails/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+          read: true
+      })
+    })
+
+  }); // .then
+
+} // fuction open_email
+
+
 function load_mailbox(mailbox) {
-  
+
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#open-email').style.display = 'none';
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
@@ -93,10 +141,14 @@ function load_mailbox(mailbox) {
         row.insertAdjacentHTML('beforeEnd', colSubject);
         row.insertAdjacentHTML('beforeEnd', colTime);
 
+        // Add event listener
+        const email_id = emails[i].id
+        row.addEventListener('click', () => open_email(email_id));
+
         // Append row into #email-view element
         emailsContent.appendChild(row);
 
-      } // For loop
+      } // for loop
       
     }); // .then
 
