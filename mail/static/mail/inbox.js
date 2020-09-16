@@ -49,7 +49,7 @@ function compose_email() {
 }
 
 
-function open_email(id) {
+function open_email(id, mailbox) {
 
   console.log('This element has been clicked!')
   // console.log(email)
@@ -68,18 +68,27 @@ function open_email(id) {
     console.log(email);
 
     // Display email
-    var content = document.querySelector('#open-email')
-    var element = document.createElement('div')
+    var content = document.querySelector('#open-email');
+    var element = document.createElement('div');
     element.innerHTML = `<b>From: </b> ${email.sender}<br>
                         <b>To: </b> ${email.recipients}<br>
                         <b>Subject: </b> ${email.subject}<br>
                         <b>Timestamp: </b> ${email.timestamp}<br>
-                        <button id="reply-button" type="button" class="btn btn-outline-primary">Reply</button>
-                        <button id="archive-button" type="button" class="btn btn-outline-primary">Archive</button>
+                        <div id="button-row"></div>
                         <hr>
                         ${email.body}`
 
     content.appendChild(element)
+
+    // Add buttons for inbox emails
+    var buttonRow = document.querySelector('#button-row');
+    if(mailbox === 'inbox') {
+      buttonRow.innerHTML = `<button id="reply-button" type="button" class="btn btn-outline-primary">Reply</button>
+                            <button id="archive-button" type="button" class="btn btn-outline-primary">Archive</button>
+                            `
+    }else if(mailbox === 'archive') {
+      buttonRow.innerHTML = `<button id="archive-button" type="button" class="btn btn-outline-primary">Unarchive</button>`
+    }
 
     // Mark email as read
     fetch(`/emails/${id}`, {
@@ -88,6 +97,23 @@ function open_email(id) {
           read: true
       })
     })
+
+    // Archive / Unarchive email 
+    var archiveBtn = document.querySelector('#archive-button')
+
+    function archive(status) {
+      fetch(`/emails/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            archived: !status
+        })
+      }) // fetch
+
+      load_mailbox('inbox')
+    } // func archive
+
+    archiveBtn.addEventListener('click', () => archive(email.archived));
+
 
   }); // .then
 
@@ -143,7 +169,7 @@ function load_mailbox(mailbox) {
 
         // Add event listener
         const email_id = emails[i].id
-        row.addEventListener('click', () => open_email(email_id));
+        row.addEventListener('click', () => open_email(email_id, mailbox));
 
         // Append row into #email-view element
         emailsContent.appendChild(row);
