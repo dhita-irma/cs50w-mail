@@ -30,7 +30,7 @@ function compose_email(email='new') {
   
     // Pre-fill form
     document.querySelector('#compose-recipients').value = email.sender;
-    document.querySelector('#compose-body').value = `On ${email.timestamp} ${email.sender} wrote:\n${email.body}`;
+    document.querySelector('#compose-body').value = `\n\n\nOn ${email.timestamp} ${email.sender} wrote:\n "${email.body}"`;
     
     var subject = email.subject;
     if(subject.slice(0, 3).toLowerCase() === 're:') {
@@ -60,11 +60,9 @@ function compose_email(email='new') {
     .then(response => response.json())
     .then(result => {
       console.log(result);
+      load_mailbox('sent');
     });
-
-    //Load sent box
-    load_mailbox('sent');
-
+   
   }
 }
 
@@ -90,13 +88,14 @@ function open_email(id, mailbox) {
     // Display email
     var content = document.querySelector('#open-email');
     var element = document.createElement('div');
+    element.className = 'email-content'
     element.innerHTML = `<b>From: </b> ${email.sender}<br>
                         <b>To: </b> ${email.recipients}<br>
                         <b>Subject: </b> ${email.subject}<br>
                         <b>Timestamp: </b> ${email.timestamp}<br>
                         <div id="button-row"></div>
                         <hr>
-                        ${email.body}`
+                        <div class="email-body">${email.body}</div>`
 
     content.appendChild(element)
 
@@ -128,8 +127,11 @@ function open_email(id, mailbox) {
             archived: !status
         })
       }) // fetch
-
-      load_mailbox('inbox')
+      .then(result => {
+        console.log(result);
+        load_mailbox('inbox');
+      });
+      
     } // func archive
 
     archiveBtn.addEventListener('click', () => archive(email.archived));
