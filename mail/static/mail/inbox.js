@@ -1,11 +1,31 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-  // Use buttons to toggle between views
-  document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
-  document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
-  document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
-  document.querySelector('#compose').addEventListener('click', () => compose_email());
+  // Show Sections 
+  function showSection(section) {
+    if(section === 'compose') {
+      compose_email();
+    } else {
+      load_mailbox(section);
+    }
+  }
 
+  // Display page on button click and add to history
+  var navigation = document.querySelector('.navigation');
+  navButtons = navigation.querySelectorAll('button').forEach(button => {
+    button.onclick = function() {
+
+      const section = button.id
+      history.pushState({'section': section}, "", section);
+      showSection(section); 
+    }
+  });
+
+  // Enable go back to previous page in history
+  window.onpopstate = function(event) {
+    console.log(event.state.section);
+    showSection(event.state.section);
+  }
+  
   // By default, load the inbox
   load_mailbox('inbox');
 });
