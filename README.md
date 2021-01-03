@@ -7,18 +7,19 @@ Simple email client that makes API calls to send and receive emails built with D
 - [Technologies](#technologies)
 - [Features](#features)
 - [Setup](#setup)
-- [Sources](#sources)
 
 
 ## Project Summary
 This project is created for [Project 3 of CS50W](https://cs50.harvard.edu/web/2020/projects/3/mail/). Mail is a simple single page email app that allows user to check inbox, sentbox, send, and receive email.
 
-The backend of the project had already been developed by CS50W. What I worked on in this project is the front-end using JavaScript to make the webpage run dynamically in a single page. 
+All the Python code of the project had already been developed by CS50W. What I worked on in this project is the front-end using JavaScript to make the webpage run dynamically in a single page. 
 
 
 ## Technologies 
-This project is created with Python Django 3.1.1 and JavaScript
-
+#### Python Django 3.1.1
+#### JavaScript
+- Fetch emails with API (GET, POST, PUT methods)
+- Create, hide, and display elements 
 
 ## Features 
 - Send Mail
